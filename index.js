@@ -2,7 +2,6 @@ const anybar = require('anybar');
 const currentDateFirebaseCalories = require('./firebase_connection');
 const execSync = require('child_process').execSync;
 
-
 currentDateFirebaseCalories(function(data) {
   var parsed = data.val();
   var date = Object.keys(parsed)[0];

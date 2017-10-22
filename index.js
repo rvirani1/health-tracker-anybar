@@ -1,22 +1,30 @@
+"use strict";
+
 const anybar = require('anybar');
 const currentDateFirebaseCalories = require('./firebase_connection');
 const execSync = require('child_process').execSync;
 
-currentDateFirebaseCalories(function(data) {
-  var parsed = data.val();
-  var date = Object.keys(parsed)[0];
-  var calories = parsed[date];
-  console.log(calories);
+const parseCalsFromData = (data) => {
+  const parsed = data.val();
+  const date = Object.keys(parsed)[0];
+  return parsed[date];
+};
 
-
+const determineColor = (calories) => {
   if (calories < 1500) {
-    anybar('green');
+    return 'green';
   } else if (calories < 2000) {
-    anybar('yellow');
-    execSync('say "Alert! Getting close to your caloric limit!"');
+    execSync('say "Alert! Getting close to your caloric limit!"'); // Let's have some fun!
+    return 'yellow';
   } else {
-    anybar('red');
-    execSync('say "Dude, stop eating!"');
+    execSync('say "Dude, stop eating!"'); // More fun!
+    return 'red';
   }
+};
+
+currentDateFirebaseCalories((data) => {
+  const calories = parseCalsFromData(data);
+  const color = determineColor(calories);
+  anybar(color)
 });
 

@@ -1,5 +1,6 @@
-var firebase = require('firebase-admin');
-var moment = require('moment-timezone');
+"use strict";
+
+const firebase = require('firebase-admin');
 
 require('dotenv').config();
 
@@ -12,19 +13,12 @@ firebase.initializeApp({
   databaseURL: process.env.FIREBASE_DATABASE_URL
 });
 
-var firebaseCalRef = firebase.database().ref('/calories');
-var currentDateStr = moment().tz('America/New_York').format('YYYY-MM-DD');
+const firebaseCalRef = firebase.database().ref('/calories');
 
-function currentDateFirebaseRef() {
-  return firebaseCalRef.child(currentDateStr);
-}
-
-function currentDateFirebaseCalories(cb) {
+const currentDateFirebaseCalories = (cb) => {
   return firebaseCalRef.orderByKey()
     .limitToLast(1)
     .on('value', cb);
-
-}
+};
 
 module.exports = currentDateFirebaseCalories;
-
